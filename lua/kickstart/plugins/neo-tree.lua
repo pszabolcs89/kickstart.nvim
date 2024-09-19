@@ -14,11 +14,67 @@ return {
     { '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
   },
   opts = {
+    commands = {
+      -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/370#discussioncomment-6679447
+      copy_path = function(state)
+        local node = state.tree:get_node()
+        local filepath = node:get_id()
+        local filename = node.name
+        local modify = vim.fn.fnamemodify
+
+        local vals = {
+          ["Basename"] = modify(filename, ":r"),
+          ["Extension"] = modify(filename, ":e"),
+          ["Filename"] = filename,
+          ["Path (cwd)"] = modify(filepath, ":."),
+          ["Path (home)"] = modify(filepath, ":~"),
+          ["Fullpath"] = filepath,
+          ["Uri"] = vim.uri_from_fname(filepath),
+        }
+
+        -- filter out empty values from the table
+        local options = vim.tbl_filter(
+          function(val)
+            return vals[val] ~= ""
+          end,
+          vim.tbl_keys(vals)
+        )
+
+        if vim.tbl_isempty(options) then
+          vim.notify("No values to copy", vim.log.levels.WARN)
+          return
+        end
+
+        table.sort(options)
+
+        vim.ui.select(options, {
+          prompt = "Choose to copy to clipboard:",
+          format_item = function(item)
+            return ("%s: %s"):format(item, vals[item])
+          end,
+        }, function(choice)
+          local result = vals[choice]
+          if result then
+            vim.notify(("Copied: `%s`"):format(result))
+            vim.fn.setreg("+", result)
+          end
+        end)
+      end,
+    },
+    window = {
+      mappings = {
+        Y = "copy_path",
+      },
+    },
     filesystem = {
       window = {
         mappings = {
           ['\\'] = 'close_window',
         },
+      },
+      follow_current_file = {
+        enabled = true,
+        leave_dirs_open = true,
       },
     },
   },
