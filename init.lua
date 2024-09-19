@@ -291,6 +291,8 @@ require('lazy').setup({
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
         ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+        ['<leader>o'] = { name = '[O]rgmode', _ = 'which_key_ignore' },
+        ['<leader>z'] = { name = '[Z]k', _ = 'which_key_ignore' },
       }
       -- visual mode
       require('which-key').register({
