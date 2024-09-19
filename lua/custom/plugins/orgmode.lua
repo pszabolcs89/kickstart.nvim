@@ -13,12 +13,13 @@ return {
         t = { description = 'Task', template = '* TODO %?\n  %u' },
         W = {
               description = 'Daily work journal',
-              template = '\n*** %<%Y-%m-%d> %<%A> :work:\n**** %U\n\n%?',
+              template = '\n*** %<%Y-%m-%d> %<%A> :work:\n\n%?',
               target = '~/mnotes/orgfiles/journal/%<%Y>/%<%m>/%<%Y-%m-%d>.org'
             },
         },
       org_id_link_to_org_use_id = true,
       org_id_method = 'ts',
+      org_startup_folded = 'showeverything',
     })
 
     -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
