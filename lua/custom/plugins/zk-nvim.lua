@@ -17,6 +17,9 @@ return {
 
     -- Search for the notes matching the current visual selection.
     { "<leader>zf", ":'<,'>ZkMatch<CR>", mode = "v", desc = "Search Notes" },
+
+    -- CD into the notebook root.
+    { "<leader>zc", "<Cmd>ZkCd<CR>", desc = "CD into the Notebook root" },
   },
   config = function()
     require("zk").setup({

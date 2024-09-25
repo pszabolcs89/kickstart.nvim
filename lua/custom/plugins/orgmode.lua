@@ -14,7 +14,7 @@ return {
         W = {
               description = 'Daily work journal',
               template = '\n*** %<%Y-%m-%d> %<%A> :work:\n\n%?',
-              target = '~/mnotes/orgfiles/journal/%<%Y>/%<%m>/%<%Y-%m-%d>.org'
+              target = '~/mnotes/orgfiles/work/journal/%<%Y>/%<%m>/%<%Y-%m-%d>.org'
             },
         },
       org_id_link_to_org_use_id = true,
