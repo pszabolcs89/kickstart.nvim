@@ -293,6 +293,7 @@ require('lazy').setup({
         ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
         ['<leader>o'] = { name = '[O]rgmode', _ = 'which_key_ignore' },
         ['<leader>z'] = { name = '[Z]k', _ = 'which_key_ignore' },
+        ['gz'] = { name = 'Surround', _ = 'which_key_ignore' },
       }
       -- visual mode
       require('which-key').register({
@@ -812,11 +813,25 @@ require('lazy').setup({
       require('mini.ai').setup { n_lines = 500 }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      -- NOTE: le kellett cseréljem az s prefixet gz-re, hogy ne ütközzön a ggandor/leap pluginnal (leap művelet gyakoribb, mint a surround)
       --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- - gzaiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - gzd'   - [S]urround [D]elete [']quotes
+      -- - gzr)'  - [S]urround [R]eplace [)] [']
+      require('mini.surround').setup {
+        mappings = {
+          add = 'gza', -- Add surrounding in Normal and Visual modes
+          delete = 'gzd', -- Delete surrounding
+          find = 'gzf', -- Find surrounding (to the right)
+          find_left = 'gzF', -- Find surrounding (to the left)
+          highlight = 'gzh', -- Highlight surrounding
+          replace = 'gzr', -- Replace surrounding
+          update_n_lines = 'gzn', -- Update `n_lines`
+
+          suffix_last = 'l', -- Suffix to search with "prev" method
+          suffix_next = 'n', -- Suffix to search with "next" method
+        },
+      }
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
