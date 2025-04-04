@@ -325,9 +325,8 @@ require('lazy').setup({
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
 
-        { "<leader>o", group = "[O]rgmode" },
-        { "<leader>z", group = "[Z]k" },
-
+        { '<leader>o', group = '[O]rgmode' },
+        { '<leader>z', group = '[Z]k' },
       },
     },
   },
@@ -624,6 +623,8 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+
+        omnisharp = {},
 
         lua_ls = {
           -- cmd = {...},
