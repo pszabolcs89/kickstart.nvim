@@ -785,6 +785,7 @@ require('lazy').setup({
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
 
         json = { 'jq' },
+        markdown = { 'markdownlint' },
       },
     },
   },
