@@ -35,6 +35,13 @@ return {
       desc = 'Debug: Start/Continue',
     },
     {
+      '<S-F5>',
+      function()
+        require('dap').terminate()
+      end,
+      desc = 'Debug: Stop',
+    },
+    {
       '<F11>',
       function()
         require('dap').step_into()
@@ -63,11 +70,25 @@ return {
       desc = 'Debug: Toggle Breakpoint',
     },
     {
-      '<leader>B',
+      '<leader>dB',
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Debug: Set Breakpoint (with condition)',
+    },
+    {
+      '<leader>dG',
+      function()
+        require('dap').goto_()
+      end,
+      desc = 'Debug: Jump(!) to line under cursor',
+    },
+    {
+      '<leader>dr',
+      function()
+        require('dap').run_to_cursor()
+      end,
+      desc = 'Debug: Run until line under cursor',
     },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
@@ -76,6 +97,23 @@ return {
         require('dapui').toggle()
       end,
       desc = 'Debug: See last session result.',
+    },
+    -- dap-python specific keymaps
+    {
+      '<leader>dm',
+      function()
+        require('dap-python').test_method()
+      end,
+      ft = 'python',
+      desc = 'Debug: Test Method',
+    },
+    {
+      '<leader>dc',
+      function()
+        require('dap-python').test_class()
+      end,
+      ft = 'python',
+      desc = 'Debug: Test Class',
     },
   },
   config = function()
@@ -146,6 +184,6 @@ return {
     --   },
     -- }
 
-    require('dap-python').setup 'python'
+    require('dap-python').setup(vim.fn.has 'win32' and 'python' or 'python3')
   end,
 }
