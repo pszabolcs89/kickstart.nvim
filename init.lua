@@ -382,6 +382,8 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+
+      -- It sets vim.ui.select to telescope. That means for example that neovim core stuff can fill the telescope picker.
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       {
@@ -390,6 +392,8 @@ require('lazy').setup({
         -- For major updates, this must be adjusted manually.
         -- version = "^1.0.0",
       },
+
+      'nvim-orgmode/telescope-orgmode.nvim',
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
@@ -456,6 +460,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'live_grep_args')
+      pcall(require('telescope').load_extension, 'orgmode')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -493,6 +498,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- telescope-orgmode keymaps
+      vim.keymap.set('n', '<leader>sor', require('telescope').extensions.orgmode.refile_heading)
+      vim.keymap.set('n', '<leader>soh', require('telescope').extensions.orgmode.search_headings)
+      vim.keymap.set('n', '<leader>soli', require('telescope').extensions.orgmode.insert_link)
     end,
   },
 
@@ -615,6 +625,7 @@ require('lazy').setup({
             if vim.fn.has 'nvim-0.11' == 1 then
               return client:supports_method(method, bufnr)
             else
+              ---@diagnostic disable-next-line: param-type-mismatch
               return client.supports_method(method, { bufnr = bufnr })
             end
           end
