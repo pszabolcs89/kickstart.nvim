@@ -3,7 +3,13 @@
 return {
   'yorickpeterse/nvim-window',
   keys = {
-    { '<leader>wj', "<cmd>lua require('nvim-window').pick()<cr>", desc = 'nvim-window: Jump to window' },
+    {
+      '<leader>wj',
+      function()
+        require('nvim-window').pick()
+      end,
+      desc = 'nvim-window: Jump to window',
+    },
   },
   config = true,
 }
