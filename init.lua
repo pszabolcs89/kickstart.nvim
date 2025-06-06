@@ -208,6 +208,21 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+-- Change ,; for f/t search
+vim.keymap.set({ 'n', 'v' }, ',', ';', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, ';', ',', { noremap = true })
+
+-- custom tab keymaps (from tabby.nvim readme)
+vim.api.nvim_set_keymap('n', '<leader>ta', ':$tabnew<CR>', { desc = 'New tab', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close tab', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>to', ':tabonly<CR>', { desc = 'Close all other tab', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>tn', ':tabn<CR>', { desc = 'Next tab', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>tp', ':tabp<CR>', { desc = 'Previous tab', noremap = true, silent = true })
+-- move current tab to previous position
+vim.api.nvim_set_keymap('n', '<leader>tmp', ':-tabmove<CR>', { desc = 'Move tab to left', noremap = true, silent = true })
+-- move current tab to next position
+vim.api.nvim_set_keymap('n', '<leader>tmn', ':+tabmove<CR>', { desc = 'Move tab to right', noremap = true, silent = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -500,9 +515,17 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
 
       -- telescope-orgmode keymaps
-      vim.keymap.set('n', '<leader>sor', require('telescope').extensions.orgmode.refile_heading)
-      vim.keymap.set('n', '<leader>soh', require('telescope').extensions.orgmode.search_headings)
-      vim.keymap.set('n', '<leader>soli', require('telescope').extensions.orgmode.insert_link)
+      vim.keymap.set('n', '<leader>sor', function()
+        require('telescope').extensions.orgmode.refile_heading()
+      end, { desc = 'Telescope-orgmode: Refile heading' })
+
+      vim.keymap.set('n', '<leader>soh', function()
+        require('telescope').extensions.orgmode.search_headings()
+      end, { desc = 'Telescope-orgmode: Search headings' })
+
+      vim.keymap.set('n', '<leader>soli', function()
+        require('telescope').extensions.orgmode.insert_link()
+      end, { desc = 'Telescope-orgmode: Insert link' })
     end,
   },
 
