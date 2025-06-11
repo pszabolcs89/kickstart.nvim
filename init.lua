@@ -175,6 +175,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- remap esc to lkj
 vim.keymap.set('i', 'lkj', '<Esc>', { noremap = true })
+vim.keymap.set('i', 'klj', '<Esc>', { noremap = true })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -222,6 +223,14 @@ vim.api.nvim_set_keymap('n', '<leader>tp', ':tabp<CR>', { desc = 'Previous tab',
 vim.api.nvim_set_keymap('n', '<leader>tmp', ':-tabmove<CR>', { desc = 'Move tab to left', noremap = true, silent = true })
 -- move current tab to next position
 vim.api.nvim_set_keymap('n', '<leader>tmn', ':+tabmove<CR>', { desc = 'Move tab to right', noremap = true, silent = true })
+
+-- add a blank line below the cursor
+-- from: https://github.com/tummetott/unimpaired.nvim/blob/main/lua/unimpaired/functions.lua#L200
+vim.keymap.set('n', '<leader><cr>', function()
+  local repeated = vim.fn['repeat']({ '' }, vim.v.count1)
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+  vim.api.nvim_buf_set_lines(0, line, line, true, repeated)
+end, { desc = 'Add blank line', noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -442,11 +451,34 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          initial_mode = 'normal',
+          mappings = {
+            i = {
+              -- ['<c-enter>'] = 'to_fuzzy_refine' ,
+              -- Using nvim-window-picker to choose a target window when opening a file from any picker.
+              -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#using-nvim-window-picker-to-choose-a-target-window-when-opening-a-file-from-any-picker
+              ['<C-g>'] = function(prompt_bufnr)
+                -- Use nvim-window-picker to choose the window by dynamically attaching a function
+                local action_set = require 'telescope.actions.set'
+                local action_state = require 'telescope.actions.state'
+
+                local cpicker = action_state.get_current_picker(prompt_bufnr)
+                cpicker.get_selection_window = function(picker, _)
+                  local picked_window_id = require('window-picker').pick_window() or vim.api.nvim_get_current_win()
+                  -- Unbind after using so next instance of the picker acts normally
+                  picker.get_selection_window = nil
+                  return picked_window_id
+                end
+
+                return action_set.edit(prompt_bufnr, 'edit')
+              end,
+            },
+          },
+          preview = {
+            filesize_limit = 1, -- MB
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -502,6 +534,13 @@ require('lazy').setup({
           previewer = false,
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
+
+      -- Find sibling files of current file
+      -- This function is basically find_files() but only for the directory containing the file you're currently
+      -- editing. So you don't have to open up :Explore, tree, or anything else to browse next to the current file.
+      vim.keymap.set('n', '<leader>.', function()
+        builtin.find_files { cwd = vim.fn.expand '%:p:h' }
+      end, { desc = '[.] Find sibling files of current file' })
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -997,6 +1036,8 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
+
+      require('mini.pairs').setup()
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       -- NOTE: le kellett cseréljem az s prefixet gz-re, hogy ne ütközzön a ggandor/leap pluginnal (leap művelet gyakoribb, mint a surround)
