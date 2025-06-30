@@ -232,6 +232,14 @@ vim.keymap.set('n', '<leader><cr>', function()
   vim.api.nvim_buf_set_lines(0, line, line, true, repeated)
 end, { desc = 'Add blank line', noremap = true, silent = true })
 
+-- convert to utf8 and save
+vim.api.nvim_set_keymap(
+  'n',
+  '<leader>gu',
+  ':set fileencoding=utf-8<CR>:w ++encoding=utf-8<CR>',
+  { desc = 'Save and convert to UTF-8', noremap = true, silent = true }
+)
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
