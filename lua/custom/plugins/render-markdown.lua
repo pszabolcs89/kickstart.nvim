@@ -8,7 +8,7 @@ return {
   ft = { 'markdown' },
   keys = {
     {
-      '<leader>mt',
+      '<leader>wm',
       function()
         require('render-markdown').buf_toggle()
       end,
