@@ -128,6 +128,7 @@ return {
         enabled = true,
         leave_dirs_open = true,
       },
+      hijack_netrw_behavior = 'disabled',
     },
     default_component_configs = {
       indent = {
