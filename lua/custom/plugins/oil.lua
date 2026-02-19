@@ -1,4 +1,6 @@
 -- https://github.com/stevearc/oil.nvim
+
+local detail = false
 return {
   'stevearc/oil.nvim',
   ---@module 'oil'
@@ -21,6 +23,17 @@ return {
       ['gx'] = 'actions.open_external',
       ['g.'] = { 'actions.toggle_hidden', mode = 'n' },
       ['g\\'] = { 'actions.toggle_trash', mode = 'n' },
+      ['gd'] = {
+        desc = 'Toggle file detail view',
+        callback = function()
+          detail = not detail
+          if detail then
+            require('oil').set_columns { 'icon', 'permissions', 'size', { 'mtime', format = '%Y-%m-%d %H:%M:%S' } }
+          else
+            require('oil').set_columns { 'icon' }
+          end
+        end,
+      },
     },
     use_default_keymaps = false,
   },
