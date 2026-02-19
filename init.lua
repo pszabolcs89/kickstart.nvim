@@ -219,6 +219,7 @@ vim.api.nvim_set_keymap('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close tab'
 vim.api.nvim_set_keymap('n', '<leader>to', ':tabonly<CR>', { desc = 'Close all other tab', noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabn<CR>', { desc = 'Next tab', noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>tp', ':tabp<CR>', { desc = 'Previous tab', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>tt', 'g<TAB>', { desc = 'Last accessed tab', noremap = true, silent = true })
 -- move current tab to previous position
 vim.api.nvim_set_keymap('n', '<leader>tmp', ':-tabmove<CR>', { desc = 'Move tab to left', noremap = true, silent = true })
 -- move current tab to next position
