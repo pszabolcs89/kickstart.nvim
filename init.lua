@@ -456,6 +456,7 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local actions = require 'telescope.actions'
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -488,7 +489,32 @@ require('lazy').setup({
             filesize_limit = 1, -- MB
           },
         },
-        -- pickers = {}
+        pickers = {
+          buffers = {
+            mappings = {
+              i = { ['<CR>'] = actions.select_tab_drop },
+              n = { ['<CR>'] = actions.select_tab_drop },
+            },
+          },
+          find_files = {
+            mappings = {
+              i = { ['<CR>'] = actions.select_tab_drop },
+              n = { ['<CR>'] = actions.select_tab_drop },
+            },
+          },
+          git_files = {
+            mappings = {
+              i = { ['<CR>'] = actions.select_tab_drop },
+              n = { ['<CR>'] = actions.select_tab_drop },
+            },
+          },
+          old_files = {
+            mappings = {
+              i = { ['<CR>'] = actions.select_tab_drop },
+              n = { ['<CR>'] = actions.select_tab_drop },
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -1111,6 +1137,12 @@ require('lazy').setup({
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
+    config = function(plugin, opts)
+      require(plugin.main).setup(opts)
+
+      -- Alias csharp → c_sharp
+      vim.treesitter.language.register('c_sharp', 'csharp')
+    end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
