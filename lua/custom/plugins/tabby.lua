@@ -9,5 +9,6 @@ return {
   ---@type TabbyConfig
   opts = {
     -- configs...
+    preset = 'tab_only',
   },
 }
