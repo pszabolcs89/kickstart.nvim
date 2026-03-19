@@ -385,6 +385,7 @@ require('lazy').setup({
         { '<leader>tm', group = 'Move tabs' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>d', group = '[D]ebug' },
+        { '<leader>do', group = '[O]verseer' },
         { '<leader>w', group = '[W]indows' },
 
         { '<leader>o', group = '[O]rgmode' },
