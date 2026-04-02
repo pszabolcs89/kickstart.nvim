@@ -48,6 +48,8 @@ return {
               args = args,
               components = {
                 { 'user.fidget_progress', in_progress_message = 'MSBuild in progress' },
+                { 'on_output_parse', problem_matcher = '$msCompile' },
+                { 'on_result_diagnostics_quickfix', set_empty_results = true, open = true },
                 'default',
               },
             }
