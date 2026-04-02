@@ -47,7 +47,7 @@ return {
               cmd = { 'msbuild' },
               args = args,
               components = {
-                { 'on_output_quickfix', open = true },
+                { 'user.fidget_progress', in_progress_message = 'MSBuild in progress' },
                 'default',
               },
             }
