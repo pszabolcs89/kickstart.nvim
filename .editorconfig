@@ -1,0 +1,30 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+charset = utf-8
+
+# Xml files
+[*.xml]
+indent_size = 2
+
+#### Core EditorConfig Options ####
+
+# Indentation and spacing
+indent_size = 4
+tab_width = 4
+
+# .gitattributes fájlra van bízva a sorvégi karakterek kezelése
+## end_of_line = crlf
+
+insert_final_newline = true
+
+[*.json]
+indent_size = 2
+#
+# Lua files
+[*.lua]
+indent_size = 2
+trim_trailing_whitespace = true
+

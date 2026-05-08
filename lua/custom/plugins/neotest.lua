@@ -7,7 +7,9 @@ return {
     'nvim-lua/plenary.nvim',
     'antoinemadec/FixCursorHold.nvim',
     'nvim-treesitter/nvim-treesitter',
+    -- adapters
     'nvim-neotest/neotest-python',
+    'nsidorenco/neotest-vstest',
   },
   keys = {
     {
@@ -51,6 +53,12 @@ return {
           --   if vim.fn.executable(venv) == 1 then return venv end
           --   return "python"
           -- end,
+        },
+
+        require 'neotest-vstest' {
+          dap_settings = {
+            type = 'coreclr',
+          },
         },
       },
     }
