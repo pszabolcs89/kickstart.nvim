@@ -851,6 +851,41 @@ require('lazy').setup({
         },
       }
 
+      local registry_status_ok, mason_registry = pcall(require, 'mason-registry')
+      if not registry_status_ok then
+        return
+      end
+
+      mason_registry.refresh(function()
+        local mdformat = mason_registry.get_package 'mdformat'
+        local mdformat_extensions = {
+          -- 'mdformat-gfm',
+          -- 'mdformat-toc',
+          -- 'mdformat-myst',
+          'mdformat-frontmatter',
+        }
+        local python = vim.fn.expand '$MASON/packages/mdformat/venv/Scripts/python.exe'
+
+        mdformat:on('install:success', function()
+          -- Create the installation command.
+          -- vim.notify 'Installing mdformat extensions.'
+          local extensions = table.concat(mdformat_extensions, ' ')
+          -- local python = mdformat:get_install_path() .. '/venv/bin/python'
+          local pip_cmd = string.format('%s -m pip install %s', python, extensions)
+
+          -- vim.fn.jobstart doesn't work in callback so use popen instead.
+          local handle = io.popen(pip_cmd)
+          if not handle then
+            -- vim.notify('Could not install "mdformat extensions".', vim.log.levels.ERROR)
+            return
+          end
+          local _ = handle:read '*a'
+          handle:close()
+
+          -- vim.notify '"mdformat extensions" were successfully installed.'
+        end)
+      end)
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -868,6 +903,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'markdownlint',
+        'mdformat',
         'ruff',
         'codelldb',
       })
@@ -929,7 +965,7 @@ require('lazy').setup({
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
 
         json = { 'jq' },
-        markdown = { 'markdownlint' },
+        markdown = { 'mdformat', 'markdownlint' },
       },
     },
   },
