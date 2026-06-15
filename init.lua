@@ -225,6 +225,15 @@ vim.api.nvim_set_keymap('n', '<leader>tmp', ':-tabmove<CR>', { desc = 'Move tab 
 -- move current tab to next position
 vim.api.nvim_set_keymap('n', '<leader>tmn', ':+tabmove<CR>', { desc = 'Move tab to right', noremap = true, silent = true })
 
+-- Create a scratch buffer with a keymap
+vim.keymap.set('n', '<leader>wa', function()
+  vim.cmd.enew()
+  local bo = vim.bo
+  bo.buftype = 'nofile'
+  bo.bufhidden = 'wipe'
+  bo.swapfile = false
+end, { desc = 'New scratch buffer' })
+
 -- add a blank line below the cursor
 -- from: https://github.com/tummetott/unimpaired.nvim/blob/main/lua/unimpaired/functions.lua#L200
 vim.keymap.set('n', '<leader><cr>', function()
@@ -951,7 +960,7 @@ require('lazy').setup({
           return nil
         else
           return {
-            timeout_ms = 500,
+            timeout_ms = 1500,
             lsp_format = 'fallback',
           }
         end
@@ -1158,8 +1167,9 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    main = 'nvim-treesitter', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
