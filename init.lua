@@ -873,7 +873,11 @@ require('lazy').setup({
           -- 'mdformat-myst',
           'mdformat-frontmatter',
         }
+
         local python = vim.fn.expand '$MASON/packages/mdformat/venv/Scripts/python.exe'
+        if vim.fn.has 'win32' == 0 then
+          python = vim.fn.expand '$MASON/packages/mdformat/venv/bin/python3'
+        end
 
         mdformat:on('install:success', function()
           -- Create the installation command.
