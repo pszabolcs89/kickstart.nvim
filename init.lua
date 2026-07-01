@@ -916,6 +916,7 @@ require('lazy').setup({
         'mdformat',
         'ruff',
         'codelldb',
+        'zk',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
