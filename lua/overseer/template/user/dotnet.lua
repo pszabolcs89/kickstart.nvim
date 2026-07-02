@@ -2,6 +2,12 @@
 local dotnet_found = vim.fn.executable 'dotnet' == 1
 local solution_kind = require 'overseer.template.user.solution_kind'
 
+local function find_solution_files()
+  local slns = vim.fn.glob('*.sln', false, true)
+  vim.list_extend(slns, vim.fn.glob('*.slnx', false, true))
+  return slns
+end
+
 ---@type overseer.TemplateFileProvider
 return {
   generator = function(search, callback)
@@ -9,16 +15,22 @@ return {
       return 'dotnet not found in PATH'
     end
 
-    local slns = vim.fn.glob('*.sln', false, true)
+    local slns = find_solution_files()
     if #slns == 0 then
-      return 'no .sln file found in current directory'
+      return 'no .sln or .slnx file found in current directory'
     end
 
     local commands = {
       {
-        label = 'Build',
+        label = 'Build Debug',
         cmd = { 'dotnet' },
-        args = { 'build' },
+        args = { 'build', '--configuration', 'Debug' },
+        tag = require('overseer').TAG.BUILD,
+      },
+      {
+        label = 'Build Release',
+        cmd = { 'dotnet' },
+        args = { 'build', '--configuration', 'Release' },
         tag = require('overseer').TAG.BUILD,
       },
       {
@@ -61,6 +73,6 @@ return {
   end,
 
   cache_key = function(search)
-    return vim.fn.glob('*.sln', false, true)[1]
+    return find_solution_files()[1]
   end,
 }

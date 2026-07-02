@@ -31,7 +31,7 @@ return {
       function()
         require('neotest').summary.toggle()
       end,
-      desc = 'Toggle summary',
+      desc = 'Toggle summary panel',
     },
     {
       '<leader>dto',
@@ -39,6 +39,20 @@ return {
         require('neotest').output_panel.toggle()
       end,
       desc = 'Toggle output panel',
+    },
+    {
+      '<leader>dtr',
+      function()
+        require('neotest').run.run_last()
+      end,
+      desc = 'Run last',
+    },
+    {
+      '<leader>dtd',
+      function()
+        require('neotest').run.run_last { strategy = 'dap' }
+      end,
+      desc = 'Debug last',
     },
   },
   config = function()
