@@ -1202,6 +1202,16 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+
+    -- Treesitter from nvim > 12 needs MSBuild+C compiler for windows.
+    -- From powershell terminal:
+    --
+    -- winget install -e --id Microsoft.VisualStudio.2022.BuildTools `
+    --   accept-package-agreements --accept-source-agreements `
+    --   override "--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+
+    -- Call this from a terminal to start the developer "shell". With this cl.exe will be in PATH:
+    -- C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
