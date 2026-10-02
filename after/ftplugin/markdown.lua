@@ -153,6 +153,33 @@ local function apply_settings(line_length)
   vim.opt_local.colorcolumn = tostring(line_length + 1)
 end
 
+local function modification_time()
+  -- When synchronizing notes across devices or using version control, the file’s modification time may not reflect when
+  -- you actually last edited the note. Other external tools also might be touching the file while not changing the
+  -- contents. zk offers custom Date Keys to allow overriding the modification date in the frontmatter of notes.
+  vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = '*.md',
+    callback = function(args)
+      local lines = vim.api.nvim_buf_get_lines(args.buf, 0, -1, false)
+      local in_frontmatter = false
+
+      for i, line in ipairs(lines) do
+        if line:match '^%-%-%-$' then
+          if not in_frontmatter then
+            in_frontmatter = true
+          else
+            break
+          end
+        elseif in_frontmatter and line:match '^modified:%s' then
+          local new_line = 'modified: ' .. os.date '%Y-%m-%d %H:%M'
+          vim.api.nvim_buf_set_lines(args.buf, i - 1, i, false, { new_line })
+          return
+        end
+      end
+    end,
+  })
+end
+
 --- Main entry point.
 local function setup()
   local bufpath = vim.api.nvim_buf_get_name(0)
@@ -175,6 +202,8 @@ local function setup()
   if line_length then
     apply_settings(line_length)
   end
+
+  modification_time()
 end
 
 setup()
