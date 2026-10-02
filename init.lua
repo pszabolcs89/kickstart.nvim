@@ -250,6 +250,9 @@ vim.api.nvim_set_keymap(
   { desc = 'Save and convert to UTF-8', noremap = true, silent = true }
 )
 
+-- remove unneded CR chars
+vim.keymap.set('n', '<leader>gr', [[:%s/\r//g<CR>]], { desc = 'Remove CR characters' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -868,10 +871,11 @@ require('lazy').setup({
       mason_registry.refresh(function()
         local mdformat = mason_registry.get_package 'mdformat'
         local mdformat_extensions = {
-          -- 'mdformat-gfm',
+          'mdformat-gfm',
           -- 'mdformat-toc',
           -- 'mdformat-myst',
           'mdformat-frontmatter',
+          'mdformat-wikilink',
         }
 
         local python = vim.fn.expand '$MASON/packages/mdformat/venv/Scripts/python.exe'
@@ -920,6 +924,7 @@ require('lazy').setup({
         'mdformat',
         'ruff',
         'codelldb',
+        'prettier',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -978,7 +983,7 @@ require('lazy').setup({
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
 
-        json = { 'jq' },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
         markdown = { 'mdformat', 'markdownlint' },
       },
     },
