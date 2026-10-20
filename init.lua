@@ -838,12 +838,21 @@ require('lazy').setup({
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+        ts_ls = {
+          root_dir = function(bufnr, on_dir)
+            local root = vim.fs.root(bufnr, { 'jsconfig.json', 'tsconfig.json', 'package.json', '.git' })
+            if root then
+              on_dir(root)
+            end
+          end,
+          init_options = {
+            hostInfo = 'neovim',
+            disableAutomaticTypingAcquisition = true,
+            preferences = {
+              includeCompletionsForModuleExports = false,
+            },
+          },
+        },
 
         omnisharp = {},
 
@@ -928,19 +937,14 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      for server_name, server in pairs(servers) do
+        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+        vim.lsp.config(server_name, server)
+      end
+
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        ensure_installed = {}, -- Kickstart populates installs via mason-tool-installer.
+        automatic_enable = true,
       }
     end,
   },
